@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
+import Env from "@ioc:Adonis/Core/Env";
+import { DatabaseConfig } from "@ioc:Adonis/Lucid/Database";
 
 const databaseConfig: DatabaseConfig = {
   /*
@@ -23,7 +23,7 @@ const databaseConfig: DatabaseConfig = {
   // Para rodar testes funcionais é necessário configurar o connection dessa forma
   // connection: Env.get('NODE_ENV') === 'test' ? 'sqlite' : Env.get('DB_CONNECTION'),
 
-  connection: Env.get('DB_CONNECTION'),
+  connection: Env.get("DB_CONNECTION"),
 
   connections: {
     /*
@@ -38,21 +38,27 @@ const databaseConfig: DatabaseConfig = {
     |
     */
     pg: {
-      client: 'pg',
+      client: "pg",
       connection: {
-        host: Env.get('PG_HOST'),
-        port: Env.get('PG_PORT'),
-        user: Env.get('PG_USER'),
-        password: Env.get('PG_PASSWORD', ''),
-        database: Env.get('PG_DB_NAME'),
-        ssl: (Env.get('NODE_ENV') !== 'production') ? false : { rejectUnauthorized: false },
+        host: Env.get("PG_HOST"),
+        port: Env.get("PG_PORT"),
+        user: Env.get("PG_USER"),
+        password: Env.get("PG_PASSWORD", ""),
+        database: Env.get("PG_DB_NAME"),
+        // ssl: {
+        //   rejectUnauthorized: false,
+        // },
+        // ssl:
+        //   Env.get("NODE_ENV") !== "production"
+        //     ? false
+        //     : { rejectUnauthorized: false },
       },
       migrations: {
         naturalSort: true,
       },
       // Para rodar as seeders por meio de um arquivo centralizado
       seeders: {
-        paths: ['./database/seeders/MainSeeder']
+        paths: ["./database/seeders/MainSeeder"],
       },
       healthCheck: false,
       debug: false,
@@ -60,27 +66,26 @@ const databaseConfig: DatabaseConfig = {
 
     //config do sqlite para rodar testes funcionais
     sqlite: {
-      client: 'sqlite',
+      client: "sqlite",
       connection: {
-        filename: 'testdb/db.sqlite3',
+        filename: "testdb/db.sqlite3",
       },
       pool: {
         afterCreate: (conn, cb) => {
-          conn.run('PRAGMA foreign_keys=true', cb)
-        }
+          conn.run("PRAGMA foreign_keys=true", cb);
+        },
       },
       migrations: {
         naturalSort: true,
       },
       seeders: {
-        paths: ['./database/seeders/MainSeeder']
+        paths: ["./database/seeders/MainSeeder"],
       },
       useNullAsDefault: true,
       healthCheck: false,
       debug: false,
     },
+  },
+};
 
-  }
-}
-
-export default databaseConfig
+export default databaseConfig;
