@@ -48,10 +48,10 @@ const databaseConfig: DatabaseConfig = {
         // ssl: {
         //   rejectUnauthorized: false,
         // },
-        // ssl:
-        //   Env.get("NODE_ENV") !== "production"
-        //     ? false
-        //     : { rejectUnauthorized: false },
+        ssl:
+          Env.get("NODE_ENV") !== "production"
+            ? false
+            : { rejectUnauthorized: false },
       },
       migrations: {
         naturalSort: true,
