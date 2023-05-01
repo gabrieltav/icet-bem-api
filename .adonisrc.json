@@ -35,11 +35,5 @@
       }
     ]
   },
-  "testProviders": ["@japa/preset-adonis/TestsProvider"],
-  "metaFiles": [
-    {
-      "pattern": "package-lock.json",
-      "reloadServer": false
-    }
-  ]
+  "testProviders": ["@japa/preset-adonis/TestsProvider"]
 }
