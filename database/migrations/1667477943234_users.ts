@@ -11,8 +11,7 @@ export default class extends BaseSchema {
       table.string("password", 180).notNullable();
       table.boolean("status").notNullable().defaultTo(false);
       table.string("avatar").nullable();
-      table.date("birth_date").nullable();
-      table.string("cpf").notNullable().unique();
+      table.string("cpf").nullable().unique();
       table.string("phone", 15).nullable();
       table.string("sector").nullable();
       table.string("role").notNullable();

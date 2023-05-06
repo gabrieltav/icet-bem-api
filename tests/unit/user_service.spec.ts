@@ -3,7 +3,7 @@ import UserDto from "App/Dtos/UserDto";
 import User from "App/Models/User";
 import IUserRepository from "App/Repositories/User/IUserRepository";
 import UserService from "App/Services/User/UserService";
-import { Roles } from "App/Services/Utils/Constants";
+import { Roles } from "App/Services/Utils/Enums";
 
 test.group("User Service", (group) => {
   let userRepository: UserRepositoryTest;
