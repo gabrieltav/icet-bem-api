@@ -4,6 +4,7 @@ import InventoryDto, {
   FilterInventory,
   PaginatedInventory,
 } from "App/Dtos/InventoryDto";
+import LocationDto from "App/Dtos/locationDto";
 import Inventory from "App/Models/Inventory";
 import IInventoryRepository from "./IInventoryRepository";
 
@@ -13,23 +14,26 @@ export default class InventoryRepository implements IInventoryRepository {
   }
 
   public async show(id: string): Promise<Inventory> {
-    return await Inventory.findOrFail(id);
+    const inventory = await Inventory.findOrFail(id);
+    await inventory.load("location");
+    return inventory;
   }
 
   public async index(filter: FilterInventory): Promise<PaginatedInventory> {
-    const Inventorys: ModelPaginatorContract<Inventory> =
+    const inventorys: ModelPaginatorContract<Inventory> =
       await Inventory.query()
         .select("inventories.*")
+        .preload("location")
         .if(filter.search, (query) => {
           query.where("name", "ilike", `%${filter.search}%`);
           query.orWhere("asset_tag", "ilike", `%${filter.search}%`);
         })
         .paginate(filter.page, filter.limit);
 
-    const data = await this.dataInventory(Inventorys);
+    const data = await this.dataInventory(inventorys);
 
     const result: PaginatedInventory = {
-      ...Inventorys.toJSON().meta,
+      ...inventorys.toJSON().meta,
       data: data,
     };
 
@@ -38,11 +42,15 @@ export default class InventoryRepository implements IInventoryRepository {
 
   public async update(
     id: string,
-    partialInventory: Partial<InventoryDto>
+    partialInventory: Partial<InventoryDto>,
+    partialLocation: Partial<LocationDto>
   ): Promise<void> {
     const inventory = await Inventory.findOrFail(id);
+    await inventory.load("location");
     inventory.merge(partialInventory);
+    const location = inventory.location.merge(partialLocation);
     await inventory.save();
+    await location.save();
   }
 
   public async delete(id: string): Promise<void> {

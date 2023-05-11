@@ -37,6 +37,11 @@ export interface DataInventory {
   date?: Date;
   value: string;
   term: string;
+  roomNumber: string;
+  floor: string;
+  block: string;
+  building: string;
+  department: string;
 }
 
 export interface PaginatedInventory {

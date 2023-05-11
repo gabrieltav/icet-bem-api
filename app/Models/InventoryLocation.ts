@@ -8,7 +8,7 @@ export default class InventoryLocation extends UuidBase {
   public inventoryId: string;
 
   @column()
-  public room_number: string;
+  public roomNumber: string;
 
   @column()
   public floor: string;
