@@ -1,5 +1,5 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import { CustomMessages, rules, schema } from "@ioc:Adonis/Core/Validator";
 
 export default class UpdateUserValidator {
   constructor(protected ctx: HttpContextContract) {}
@@ -27,16 +27,16 @@ export default class UpdateUserValidator {
     name: schema.string.optional(),
     email: schema.string.optional({}, [
       rules.email(),
-      rules.unique({ table: 'users', column: 'email' })
+      rules.unique({ table: "users", column: "email" }),
     ]),
     cpf: schema.string.optional({}, [
       rules.minLength(11),
-      rules.maxLength(14),
-      rules.unique({ table: 'users', column: 'cpf' })
+      rules.maxLength(11),
+      rules.unique({ table: "users", column: "cpf" }),
     ]),
     phone: schema.string.optional(),
     sector: schema.string.optional(),
-  })
+  });
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
@@ -50,7 +50,10 @@ export default class UpdateUserValidator {
    *
    */
   public messages: CustomMessages = {
-    'email.unique': 'Já existe um usuário com este email',
-    'cpf.unique': 'Já existe um usuário com este cpf'
-  }
+    "email.unique":
+      "Este email já está sendo utilizado. Por favor, verifique se o seu email está correto ou tente usar outro.",
+    "cpf.unique":
+      "Este CPF já está sendo utilizado. Por favor, verifique se o seu CPF está correto ou tente usar outro.",
+    "cpf.maxLength": "O CPF deve ter no máximo 11 caracteres.",
+  };
 }

@@ -1,6 +1,6 @@
 import Hash from "@ioc:Adonis/Core/Hash";
 import { beforeSave, column } from "@ioc:Adonis/Lucid/Orm";
-import { Roles } from "App/Services/Utils/Constants";
+import { Roles } from "App/Services/Utils/Enums";
 import { DateTime } from "luxon";
 import UuidBase from "./Base/UuidBase";
 
@@ -19,9 +19,6 @@ export default class User extends UuidBase {
 
   @column()
   public avatar: string;
-
-  @column()
-  public birthDate: DateTime;
 
   @column()
   public cpf: string;

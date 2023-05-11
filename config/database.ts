@@ -58,7 +58,7 @@ const databaseConfig: DatabaseConfig = {
       },
       // Para rodar as seeders por meio de um arquivo centralizado
       seeders: {
-        paths: ["./database/seeders/MainSeeder"],
+        paths: ["./database/seeders"],
       },
       healthCheck: false,
       debug: false,

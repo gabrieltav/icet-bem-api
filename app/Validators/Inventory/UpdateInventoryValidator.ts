@@ -1,8 +1,8 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import { CustomMessages, rules, schema } from "@ioc:Adonis/Core/Validator";
-import { Roles } from "App/Services/Utils/Enums";
+import { CustomMessages, schema } from "@ioc:Adonis/Core/Validator";
+import { InventoryState } from "App/Services/Utils/Enums";
 
-export default class CreateUserValidator {
+export default class UpdateInventoryValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -24,22 +24,16 @@ export default class CreateUserValidator {
    *     ])
    *    ```
    */
-  private role = Object.values(Roles);
+  private state = Object.values(InventoryState);
   public schema = schema.create({
-    name: schema.string(),
-    email: schema.string({}, [
-      rules.email(),
-      rules.unique({ table: "users", column: "email" }),
-    ]),
-    password: schema.string({}, [rules.minLength(6), rules.maxLength(32)]),
-    cpf: schema.string({}, [
-      rules.minLength(11),
-      rules.maxLength(11),
-      rules.unique({ table: "users", column: "cpf" }),
-    ]),
-    phone: schema.string(),
-    sector: schema.string(),
-    role: schema.enum(this.role),
+    name: schema.string.optional(),
+    description: schema.string.optional(),
+    assetTag: schema.string.optional(),
+    qrcode: schema.string.optional(),
+    state: schema.enum.optional(this.state),
+    date: schema.date.optional(),
+    value: schema.string.optional(),
+    term: schema.string.optional(),
   });
 
   /**
@@ -54,10 +48,8 @@ export default class CreateUserValidator {
    *
    */
   public messages: CustomMessages = {
-    "email.unique": "Já existe um usuário com este email",
-    "cpf.unique": "Já existe um usuário com este cpf",
-    "cpf.maxLength": "O CPF deve ter no máximo 11 caracteres",
-    "role.enum":
-      "O campo role deve ser um dos seguintes valores: " + this.role.join(", "),
+    "state.enum":
+      "O campo state deve ser um dos seguintes valores: " +
+      this.state.join(", "),
   };
 }

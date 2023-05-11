@@ -1,2 +1,3 @@
-import './auth'
-import './password'
+import "./admin/admin";
+import "./operator/operator";
+import "./password";
