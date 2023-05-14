@@ -1,5 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import { CustomMessages, schema } from "@ioc:Adonis/Core/Validator";
+import { CustomMessages, rules, schema } from "@ioc:Adonis/Core/Validator";
 import { InventoryState } from "App/Services/Utils/Enums";
 
 export default class CreateInventoryValidator {
@@ -32,8 +32,11 @@ export default class CreateInventoryValidator {
     qrcode: schema.string.optional(),
     state: schema.enum(this.state),
     date: schema.date(),
-    value: schema.string(),
+    value: schema.number(),
     term: schema.string.optional(),
+    locationId: schema.string({}, [
+      rules.exists({ table: "locations", column: "id" }),
+    ]),
   });
 
   /**
@@ -51,5 +54,6 @@ export default class CreateInventoryValidator {
     "state.enum":
       "O campo state deve ser um dos seguintes valores: " +
       this.state.join(", "),
+    "locationId.exists": "A localização selecionada não existe.",
   };
 }

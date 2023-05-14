@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.string("qrcode").nullable();
       table.string("state").nullable();
       table.date("date").nullable();
-      table.string("value").nullable();
+      table.decimal("value", 10, 2).nullable();
       table.string("term").nullable();
 
       /**

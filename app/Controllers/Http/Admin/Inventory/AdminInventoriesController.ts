@@ -5,8 +5,6 @@ import InventoryRepository from "App/Repositories/Inventory/InventoryRepository"
 import InventoryService from "App/Services/Inventory/InventoryService";
 import CreateInventory from "App/Validators/Inventory/CreateInventoryValidator";
 import UpdateInventoryValidator from "App/Validators/Inventory/UpdateInventoryValidator";
-import CreateLocation from "App/Validators/Location/CreateLocationValidator";
-import UpdateLocationValidator from "App/Validators/Location/UpdateLocationValidator";
 
 export default class AdminInventoriesController {
   private inventoryService: InventoryService;
@@ -18,9 +16,10 @@ export default class AdminInventoriesController {
   }
 
   public async create({ request, response }: HttpContextContract) {
-    const inventoryDto = await request.validate(CreateInventory);
-    const locationDto = await request.validate(CreateLocation);
-    await this.inventoryService.create(inventoryDto, locationDto);
+    const { locationId, ...inventoryDto } = await request.validate(
+      CreateInventory
+    );
+    await this.inventoryService.create(inventoryDto, locationId);
     return response.created();
   }
 
@@ -47,9 +46,10 @@ export default class AdminInventoriesController {
   }: HttpContextContract): Promise<void> {
     const { inventoryId } = params;
     const inventory = await this.inventoryService.show(inventoryId);
-    const inventoryDto = await request.validate(UpdateInventoryValidator);
-    const locationDto = await request.validate(UpdateLocationValidator);
-    await this.inventoryService.update(inventory.id, inventoryDto, locationDto);
+    const { locationId, ...inventoryDto } = await request.validate(
+      UpdateInventoryValidator
+    );
+    await this.inventoryService.update(inventory.id, inventoryDto, locationId);
     return response.noContent();
   }
 
