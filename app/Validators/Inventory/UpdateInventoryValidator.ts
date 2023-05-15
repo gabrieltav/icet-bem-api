@@ -1,5 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import { CustomMessages, schema } from "@ioc:Adonis/Core/Validator";
+import { CustomMessages, rules, schema } from "@ioc:Adonis/Core/Validator";
 import { InventoryState } from "App/Services/Utils/Enums";
 
 export default class UpdateInventoryValidator {
@@ -32,8 +32,11 @@ export default class UpdateInventoryValidator {
     qrcode: schema.string.optional(),
     state: schema.enum.optional(this.state),
     date: schema.date.optional(),
-    value: schema.string.optional(),
+    value: schema.number.optional(),
     term: schema.string.optional(),
+    locationId: schema.string.optional({}, [
+      rules.exists({ table: "locations", column: "id" }),
+    ]),
   });
 
   /**

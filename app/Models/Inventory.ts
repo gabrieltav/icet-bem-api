@@ -1,8 +1,8 @@
-import { HasOne, column, hasOne } from "@ioc:Adonis/Lucid/Orm";
+import { ManyToMany, column, manyToMany } from "@ioc:Adonis/Lucid/Orm";
 import { InventoryState } from "App/Services/Utils/Enums";
 import { DateTime } from "luxon";
 import UuidBase from "./Base/UuidBase";
-import InventoryLocation from "./InventoryLocation";
+import Location from "./Location";
 
 export default class Inventory extends UuidBase {
   @column()
@@ -24,13 +24,17 @@ export default class Inventory extends UuidBase {
   public date: DateTime;
 
   @column()
-  public value: string;
+  public value: number;
 
   @column()
   public term: string;
 
-  @hasOne(() => InventoryLocation)
-  public location: HasOne<typeof InventoryLocation>;
+  @manyToMany(() => Location, {
+    pivotTable: "inventory_locations",
+    pivotColumns: ["is_location"],
+    pivotTimestamps: true,
+  })
+  public locations: ManyToMany<typeof Location>;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;

@@ -1,8 +1,8 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import { CustomMessages, rules, schema } from "@ioc:Adonis/Core/Validator";
-import { InventoryState } from "App/Services/Utils/Enums";
+import { CustomMessages, schema } from "@ioc:Adonis/Core/Validator";
+import { Gender } from "App/Services/Utils/Enums";
 
-export default class CreateInventoryValidator {
+export default class UpdateTeacherValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -24,19 +24,15 @@ export default class CreateInventoryValidator {
    *     ])
    *    ```
    */
-  private state = Object.values(InventoryState);
+  private gender = Object.values(Gender);
   public schema = schema.create({
-    name: schema.string(),
-    description: schema.string.optional(),
-    assetTag: schema.string(),
-    qrcode: schema.string.optional(),
-    state: schema.enum(this.state),
-    date: schema.date(),
-    value: schema.number(),
-    term: schema.string.optional(),
-    locationId: schema.string({}, [
-      rules.exists({ table: "locations", column: "id" }),
-    ]),
+    name: schema.string.optional(),
+    email: schema.string.optional(),
+    phone: schema.string.optional(),
+    gender: schema.enum.optional(this.gender),
+    department: schema.string.optional(),
+    birthDate: schema.date.optional(),
+    hireDate: schema.date.optional(),
   });
 
   /**
@@ -51,9 +47,8 @@ export default class CreateInventoryValidator {
    *
    */
   public messages: CustomMessages = {
-    "state.enum":
+    "gender.enum":
       "O campo state deve ser um dos seguintes valores: " +
-      this.state.join(", "),
-    "locationId.exists": "A localização selecionada não existe.",
+      this.gender.join(", "),
   };
 }

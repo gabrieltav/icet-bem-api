@@ -8,7 +8,7 @@ export default interface InventoryDto {
   qrcode?: string;
   state: InventoryState;
   date: DateTime;
-  value: string;
+  value: number;
   term?: string;
 }
 
@@ -27,6 +27,13 @@ export interface FilterInventory {
   limit?: number;
 }
 
+export interface FilterLocation {
+  room?: string | null;
+  floor?: number | null;
+  block?: string | null;
+  description?: string | null;
+}
+
 export interface DataInventory {
   id: string;
   name: string;
@@ -34,14 +41,13 @@ export interface DataInventory {
   assetTag: string;
   qrcode?: string;
   state: InventoryState;
-  date?: Date;
-  value: string;
+  date?: DateTime;
+  value: number;
   term: string;
-  roomNumber: string;
-  floor: string;
-  block: string;
-  building: string;
-  department: string;
+  locationRoom: string;
+  locationFloor: number;
+  locationBlock: string;
+  locationDescription: string;
 }
 
 export interface PaginatedInventory {

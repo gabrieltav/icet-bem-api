@@ -1,10 +1,10 @@
 import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
+
 import InventoryDto, {
   DataInventory,
   FilterInventory,
   PaginatedInventory,
 } from "App/Dtos/InventoryDto";
-import LocationDto from "App/Dtos/locationDto";
 import Inventory from "App/Models/Inventory";
 import IInventoryRepository from "./IInventoryRepository";
 
@@ -13,17 +13,36 @@ export default class InventoryRepository implements IInventoryRepository {
     return await Inventory.create(inventoryDto);
   }
 
-  public async show(id: string): Promise<Inventory> {
-    const inventory = await Inventory.findOrFail(id);
-    await inventory.load("location");
-    return inventory;
+  public async show(id: string): Promise<DataInventory> {
+    const inventory = await Inventory.query()
+      .where("id", id)
+      .preload("locations", (locationQuery) => {
+        locationQuery.where("is_location", true);
+      })
+      .firstOrFail();
+
+    return {
+      id: inventory.id,
+      name: inventory.name,
+      description: inventory.description,
+      assetTag: inventory.assetTag,
+      qrcode: inventory.qrcode,
+      state: inventory.state,
+      date: inventory.date,
+      value: inventory.value,
+      term: inventory.term,
+      locationRoom: inventory.locations[0]?.room || "",
+      locationFloor: inventory.locations[0]?.floor || 0,
+      locationBlock: inventory.locations[0]?.block || "",
+      locationDescription: inventory.locations[0]?.description || "",
+    };
   }
 
   public async index(filter: FilterInventory): Promise<PaginatedInventory> {
     const inventorys: ModelPaginatorContract<Inventory> =
       await Inventory.query()
         .select("inventories.*")
-        .preload("location")
+        .preload("locations")
         .if(filter.search, (query) => {
           query.where("name", "ilike", `%${filter.search}%`);
           query.orWhere("asset_tag", "ilike", `%${filter.search}%`);
@@ -42,15 +61,11 @@ export default class InventoryRepository implements IInventoryRepository {
 
   public async update(
     id: string,
-    partialInventory: Partial<InventoryDto>,
-    partialLocation: Partial<LocationDto>
+    partialInventory: Partial<InventoryDto>
   ): Promise<void> {
     const inventory = await Inventory.findOrFail(id);
-    await inventory.load("location");
     inventory.merge(partialInventory);
-    const location = inventory.location.merge(partialLocation);
     await inventory.save();
-    await location.save();
   }
 
   public async delete(id: string): Promise<void> {

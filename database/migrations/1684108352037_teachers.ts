@@ -1,19 +1,18 @@
 import BaseSchema from "@ioc:Adonis/Lucid/Schema";
 
 export default class extends BaseSchema {
-  protected tableName = "inventories";
+  protected tableName = "teachers";
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid("id").primary();
       table.string("name").nullable();
-      table.string("description").nullable();
-      table.string("asset_tag").nullable();
-      table.string("qrcode").nullable();
-      table.string("state").nullable();
-      table.date("date").nullable();
-      table.decimal("value", 10, 2).nullable();
-      table.string("term").nullable();
+      table.string("email").nullable();
+      table.string("phone").nullable();
+      table.string("gender").nullable();
+      table.date("birth_date").nullable();
+      table.date("hire_date").nullable();
+      table.string("department").nullable();
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
