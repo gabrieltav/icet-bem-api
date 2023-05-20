@@ -7,6 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid("id").primary();
       table.string("name").nullable();
+      table.string("matriculation").nullable();
       table.string("email").nullable();
       table.string("phone").nullable();
       table.string("gender").nullable();

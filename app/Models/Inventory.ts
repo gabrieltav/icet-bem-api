@@ -1,18 +1,25 @@
-import { ManyToMany, column, manyToMany } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  ManyToMany,
+  column,
+  manyToMany,
+} from "@ioc:Adonis/Lucid/Orm";
 import { InventoryState } from "App/Services/Utils/Enums";
 import { DateTime } from "luxon";
-import UuidBase from "./Base/UuidBase";
 import Location from "./Location";
 
-export default class Inventory extends UuidBase {
+export default class Inventory extends BaseModel {
+  @column({ isPrimary: true })
+  public id: string;
+
   @column()
-  public name: string;
+  public item: string;
 
   @column()
   public description: string;
 
   @column()
-  public assetTag: string;
+  public patrimony: string;
 
   @column()
   public qrcode: string;
@@ -21,7 +28,7 @@ export default class Inventory extends UuidBase {
   public state: InventoryState;
 
   @column.date()
-  public date: DateTime;
+  public dateOfAcquisition: DateTime;
 
   @column()
   public value: number;

@@ -14,12 +14,9 @@ export default class AdminLocationsController {
   }
 
   public async index({ request, response }: HttpContextContract) {
-    const { room, floor, block, description } = request.qs();
+    const { search } = request.qs();
     const inventaries = await this.locationService.index({
-      room: room ?? null,
-      floor: floor ?? null,
-      block: block ?? null,
-      description: description ?? null,
+      search: search ?? null,
     });
     return response.ok(inventaries);
   }

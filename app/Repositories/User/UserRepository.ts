@@ -19,7 +19,8 @@ export default class UserRepository implements IUserRepository {
   public async index(search: string): Promise<User[]> {
     return await User.query()
       .whereILike("name", `%${search}%`)
-      .orWhereILike("email", `%${search}%`);
+      .orWhereILike("email", `%${search}%`)
+      .orderBy("created_at", "desc");
   }
 
   public async update(

@@ -1,9 +1,16 @@
-import { ManyToMany, column, manyToMany } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  ManyToMany,
+  column,
+  manyToMany,
+} from "@ioc:Adonis/Lucid/Orm";
 import { DateTime } from "luxon";
-import UuidBase from "./Base/UuidBase";
 import Inventory from "./Inventory";
 
-export default class Location extends UuidBase {
+export default class Location extends BaseModel {
+  @column({ isPrimary: true })
+  public id: string;
+
   @column()
   public room: string;
 

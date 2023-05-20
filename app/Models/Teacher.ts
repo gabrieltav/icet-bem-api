@@ -8,6 +8,9 @@ export default class Teacher extends UuidBase {
   public name: string;
 
   @column()
+  public matriculation: string;
+
+  @column()
   public email: string;
 
   @column()

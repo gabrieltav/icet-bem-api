@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 
 export default interface TeacherDto {
   name: string;
+  matriculation: string;
   email: string;
   phone: string;
   gender: Gender;

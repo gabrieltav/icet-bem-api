@@ -1,17 +1,26 @@
+import Env from "@ioc:Adonis/Core/Env";
 import BaseSchema from "@ioc:Adonis/Lucid/Schema";
 
 export default class extends BaseSchema {
   protected tableName = "inventories";
 
   public async up() {
+    if (Env.get("NODE_ENV") !== "test") {
+      this.schema.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
+    }
+
     this.schema.createTable(this.tableName, (table) => {
-      table.uuid("id").primary();
-      table.string("name").nullable();
+      if (Env.get("NODE_ENV") !== "test") {
+        table.uuid("id").primary().defaultTo(this.raw("uuid_generate_v4()"));
+      } else {
+        table.increments("id").primary();
+      }
+      table.string("item").nullable();
       table.string("description").nullable();
-      table.string("asset_tag").nullable();
-      table.string("qrcode").nullable();
+      table.string("patrimony").nullable();
       table.string("state").nullable();
-      table.date("date").nullable();
+      table.string("qrcode").nullable();
+      table.date("date_of_acquisition").nullable();
       table.decimal("value", 10, 2).nullable();
       table.string("term").nullable();
 

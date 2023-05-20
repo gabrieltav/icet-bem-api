@@ -1,5 +1,4 @@
 import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
-
 import InventoryDto, {
   DataInventory,
   FilterInventory,
@@ -23,12 +22,11 @@ export default class InventoryRepository implements IInventoryRepository {
 
     return {
       id: inventory.id,
-      name: inventory.name,
       description: inventory.description,
-      assetTag: inventory.assetTag,
+      patrimony: inventory.patrimony,
       qrcode: inventory.qrcode,
       state: inventory.state,
-      date: inventory.date,
+      dateOfAcquisition: inventory.dateOfAcquisition,
       value: inventory.value,
       term: inventory.term,
       locationRoom: inventory.locations[0]?.room || "",
@@ -47,6 +45,7 @@ export default class InventoryRepository implements IInventoryRepository {
           query.where("name", "ilike", `%${filter.search}%`);
           query.orWhere("asset_tag", "ilike", `%${filter.search}%`);
         })
+        .orderBy("created_at", "desc")
         .paginate(filter.page, filter.limit);
 
     const data = await this.dataInventory(inventorys);
@@ -79,12 +78,11 @@ export default class InventoryRepository implements IInventoryRepository {
       (inventory) =>
         ({
           id: inventory.id,
-          name: inventory.name,
           description: inventory.description,
-          assetTag: inventory.assetTag,
+          patrimony: inventory.patrimony,
           qrcode: inventory.qrcode,
           state: inventory.state,
-          date: inventory.date.toFormat("dd-MM-yyyy"),
+          dateOfAcquisition: inventory.dateOfAcquisition.toFormat("dd-MM-yyyy"),
           value: inventory.value,
           term: inventory.term,
         } as DataInventory)

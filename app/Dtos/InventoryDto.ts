@@ -2,12 +2,11 @@ import { InventoryState } from "App/Services/Utils/Enums";
 import { DateTime } from "luxon";
 
 export default interface InventoryDto {
-  name: string;
-  description?: string;
-  assetTag: string;
-  qrcode?: string;
+  description: string;
+  item: string;
+  patrimony: string;
+  dateOfAcquisition: DateTime;
   state: InventoryState;
-  date: DateTime;
   value: number;
   term?: string;
 }
@@ -28,20 +27,16 @@ export interface FilterInventory {
 }
 
 export interface FilterLocation {
-  room?: string | null;
-  floor?: number | null;
-  block?: string | null;
-  description?: string | null;
+  search?: string | null;
 }
 
 export interface DataInventory {
   id: string;
-  name: string;
   description?: string;
-  assetTag: string;
+  patrimony: string;
   qrcode?: string;
   state: InventoryState;
-  date?: DateTime;
+  dateOfAcquisition?: DateTime;
   value: number;
   term: string;
   locationRoom: string;
