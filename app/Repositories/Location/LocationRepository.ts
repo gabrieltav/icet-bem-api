@@ -6,18 +6,12 @@ export default class LocationRepository implements ILocationRepository {
   public async index(filter: FilterLocation): Promise<Location[]> {
     return await Location.query()
       .select("locations.*")
-      .if(filter.room, (query) => {
-        query.where("room", "ilike", `%${filter.room}%`);
+      .if(filter.search, (query) => {
+        query.where("room", "ilike", `%${filter.search}%`);
+        query.orWhere("block", "ilike", `%${filter.search}%`);
+        query.orWhere("description", "ilike", `%${filter.search}%`);
       })
-      .if(filter.floor, (query) => {
-        query.where("floor", filter.floor as number);
-      })
-      .if(filter.block, (query) => {
-        query.where("block", "ilike", `%${filter.block}%`);
-      })
-      .if(filter.description, (query) => {
-        query.where("description", "ilike", `%${filter.description}%`);
-      })
+      .orderBy("created_at", "desc")
       .limit(10)
       .offset(0);
   }

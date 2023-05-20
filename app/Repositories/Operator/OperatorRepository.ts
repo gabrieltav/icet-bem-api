@@ -26,6 +26,7 @@ export default class OperatorRepository implements IOperatorRepository {
         query.where("name", "ilike", `%${filter.search}%`);
         query.orWhere("email", "ilike", `%${filter.search}%`);
       })
+      .orderBy("created_at", "desc")
       .paginate(filter.page, filter.limit);
 
     const data = await this.dataUser(users);

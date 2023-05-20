@@ -27,6 +27,7 @@ export default class UpdateTeacherValidator {
   private gender = Object.values(Gender);
   public schema = schema.create({
     name: schema.string.optional(),
+    matriculation: schema.string.optional(),
     email: schema.string.optional(),
     phone: schema.string.optional(),
     gender: schema.enum.optional(this.gender),
