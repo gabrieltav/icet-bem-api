@@ -20,4 +20,10 @@ export default class AdminLocationsController {
     });
     return response.ok(inventaries);
   }
+
+  public async locationHistory({ params, response }: HttpContextContract) {
+    const { inventoryId } = params;
+    const inventory = await this.locationService.locationHistory(inventoryId);
+    return response.ok(inventory);
+  }
 }

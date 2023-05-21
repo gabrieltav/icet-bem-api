@@ -26,12 +26,10 @@ export default class UpdateInventoryValidator {
    */
   private state = Object.values(InventoryState);
   public schema = schema.create({
-    name: schema.string.optional(),
     description: schema.string.optional(),
-    assetTag: schema.string.optional(),
-    qrcode: schema.string.optional(),
+    patrimony: schema.string.optional(),
     state: schema.enum.optional(this.state),
-    date: schema.date.optional(),
+    dateOfAcquisition: schema.date.optional(),
     value: schema.number.optional(),
     term: schema.string.optional(),
     locationId: schema.string.optional({}, [
