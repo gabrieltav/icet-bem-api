@@ -13,11 +13,21 @@ export default interface InventoryDto {
 
 export interface InventoryLocationDto {
   inventoryId: string;
-  room_number: string;
-  floor: string;
+  locationId: string;
+  isLocation: boolean;
+  createdAt: DateTime;
+  updatedAt: DateTime;
+  room: string;
+  floor: number;
   block: string;
-  building: string;
-  department?: string;
+  description: string;
+  item: string;
+  patrimony: string;
+  state: InventoryState;
+  qrcode: string | null;
+  dateOfAcquisition: string;
+  value: number;
+  term: string | null;
 }
 
 export interface FilterInventory {
