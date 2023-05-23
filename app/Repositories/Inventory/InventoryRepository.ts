@@ -42,8 +42,8 @@ export default class InventoryRepository implements IInventoryRepository {
         .select("inventories.*")
         .preload("locations")
         .if(filter.search, (query) => {
-          query.where("name", "ilike", `%${filter.search}%`);
-          query.orWhere("asset_tag", "ilike", `%${filter.search}%`);
+          query.where("description", "ilike", `%${filter.search}%`);
+          query.orWhere("item", "ilike", `%${filter.search}%`);
         })
         .orderBy("created_at", "desc")
         .paginate(filter.page, filter.limit);
