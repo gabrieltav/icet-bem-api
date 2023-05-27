@@ -49,10 +49,7 @@ export interface DataInventory {
   dateOfAcquisition?: DateTime;
   value: number;
   term: string;
-  locationRoom: string;
-  locationFloor: number;
-  locationBlock: string;
-  locationDescription: string;
+  location: string;
 }
 
 export interface PaginatedInventory {

@@ -1,11 +1,13 @@
 import Database from "@ioc:Adonis/Lucid/Database";
 import { FilterLocation, InventoryLocationDto } from "App/Dtos/InventoryDto";
+import LocationDto from "App/Dtos/LocationDto";
+import LocationFormatter from "App/Formatters/Location/LocationFormatter";
 import Location from "App/Models/Location";
 import ILocationRepository from "./ILocationRepository";
 
 export default class LocationRepository implements ILocationRepository {
-  public async index(filter: FilterLocation): Promise<Location[]> {
-    return await Location.query()
+  public async index(filter: FilterLocation): Promise<LocationDto[]> {
+    const locations = await Location.query()
       .select("locations.*")
       .if(filter.search, (query) => {
         query.where("room", "ilike", `%${filter.search}%`);
@@ -15,6 +17,9 @@ export default class LocationRepository implements ILocationRepository {
       .orderBy("created_at", "desc")
       .limit(10)
       .offset(0);
+
+    const formattedLocations = LocationFormatter.formatLocation(locations);
+    return formattedLocations;
   }
 
   public async locationHistory(

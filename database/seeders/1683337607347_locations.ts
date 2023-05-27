@@ -1628,7 +1628,7 @@ export default class extends BaseSeeder {
         room: "RECEPÇÃO",
         floor: 1,
         block: "F",
-        description: "RECEPÇÃO BLOCO F",
+        description: "RECEPÇÃO",
       },
       {
         id: "10ba5af2-c35d-4135-a61f-d4c6067d774c",

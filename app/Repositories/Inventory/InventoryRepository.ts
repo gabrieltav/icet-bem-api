@@ -4,6 +4,7 @@ import InventoryDto, {
   FilterInventory,
   PaginatedInventory,
 } from "App/Dtos/InventoryDto";
+import InventoryFormatter from "App/Formatters/Inventory/InventoryFormatter";
 import Inventory from "App/Models/Inventory";
 import IInventoryRepository from "./IInventoryRepository";
 
@@ -20,20 +21,14 @@ export default class InventoryRepository implements IInventoryRepository {
       })
       .firstOrFail();
 
-    return {
-      id: inventory.id,
-      description: inventory.description,
-      patrimony: inventory.patrimony,
-      qrcode: inventory.qrcode,
-      state: inventory.state,
-      dateOfAcquisition: inventory.dateOfAcquisition,
-      value: inventory.value,
-      term: inventory.term,
-      locationRoom: inventory.locations[0]?.room || "",
-      locationFloor: inventory.locations[0]?.floor || 0,
-      locationBlock: inventory.locations[0]?.block || "",
-      locationDescription: inventory.locations[0]?.description || "",
-    };
+    const location = inventory.locations[0];
+
+    const formattedInventory = InventoryFormatter.formatInventory(
+      inventory,
+      location
+    );
+
+    return formattedInventory;
   }
 
   public async index(filter: FilterInventory): Promise<PaginatedInventory> {
