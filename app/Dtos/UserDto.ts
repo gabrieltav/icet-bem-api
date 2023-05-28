@@ -7,7 +7,7 @@ export default interface UserDto {
   cpf?: string;
   sector?: string;
   phone?: string;
-  role: Roles;
+  role?: Roles;
 }
 
 export interface FilterUser {

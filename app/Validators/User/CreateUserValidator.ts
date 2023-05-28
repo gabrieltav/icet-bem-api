@@ -39,7 +39,7 @@ export default class CreateUserValidator {
     ]),
     phone: schema.string(),
     sector: schema.string(),
-    role: schema.enum(this.role),
+    role: schema.enum.optional(this.role),
   });
 
   /**
