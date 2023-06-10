@@ -11,6 +11,6 @@ Route.group(() => {
     "AdminOperatorsController.delete"
   );
 })
-  .middleware("userIsAdmin")
+  .middleware("auth")
   .prefix(Env.get("PREFIX"))
   .namespace("App/Controllers/Http/Admin/Operator");

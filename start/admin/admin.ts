@@ -6,6 +6,6 @@ Route.group(() => {
   Route.get("admin/user/:userId", "AdminsController.show");
   Route.get("admin/user-email", "AdminsController.showByEmail");
 })
-  .middleware("userIsAdmin")
+  .middleware("auth")
   .prefix(Env.get("PREFIX"))
   .namespace("App/Controllers/Http/Admin");

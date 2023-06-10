@@ -8,6 +8,6 @@ Route.group(() => {
   Route.get("admin/teachers/:teacherId", "AdminTeachersController.show");
   Route.delete("admin/teachers/:teacherId", "AdminTeachersController.delete");
 })
-  .middleware("userIsAdmin")
+  .middleware("auth")
   .prefix(Env.get("PREFIX"))
   .namespace("App/Controllers/Http/Admin/Teacher");

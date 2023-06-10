@@ -7,6 +7,7 @@ import InventoryDto, {
 import InventoryFormatter from "App/Formatters/Inventory/InventoryFormatter";
 import Inventory from "App/Models/Inventory";
 import IInventoryRepository from "./IInventoryRepository";
+import Location from "App/Models/Location";
 
 export default class InventoryRepository implements IInventoryRepository {
   public async create(inventoryDto: InventoryDto): Promise<Inventory> {
@@ -35,7 +36,9 @@ export default class InventoryRepository implements IInventoryRepository {
     const inventorys: ModelPaginatorContract<Inventory> =
       await Inventory.query()
         .select("inventories.*")
-        .preload("locations")
+        .preload("locations", (locationQuery) => {
+          locationQuery.where("is_location", true);
+        })
         .if(filter.search, (query) => {
           query.where("description", "ilike", `%${filter.search}%`);
           query.orWhere("item", "ilike", `%${filter.search}%`);
@@ -69,18 +72,38 @@ export default class InventoryRepository implements IInventoryRepository {
   private async dataInventory(
     inventories: ModelPaginatorContract<Inventory>
   ): Promise<DataInventory[]> {
-    return inventories.toJSON().data.map(
-      (inventory) =>
-        ({
+    const formattedInventories: DataInventory[] = [];
+
+    await Promise.all(
+      inventories.toJSON().data.map(async (inventory) => {
+        const location = inventory.locations[0];
+        const formattedLocation = location ? await this.formatLocation(location) : '';
+
+        formattedInventories.push({
           id: inventory.id,
           description: inventory.description,
           patrimony: inventory.patrimony,
           qrcode: inventory.qrcode,
           state: inventory.state,
-          dateOfAcquisition: inventory.dateOfAcquisition.toFormat("dd-MM-yyyy"),
+          dateOfAcquisition: inventory.dateOfAcquisition.toFormat('dd-MM-yyyy'),
           value: inventory.value,
           term: inventory.term,
-        } as DataInventory)
+          location: formattedLocation,
+        });
+      })
     );
+
+    return formattedInventories;
   }
+
+  private async formatLocation(location: Location): Promise<string> {
+    const { description, room, floor, block } = location;
+
+    const formattedLocation = `${description ? `${description} -` : ''}${
+      room ? ` ${room} -` : ''
+    } PISO ${floor} - BLOCO ${block}`;
+
+    return formattedLocation;
+  }
+
 }

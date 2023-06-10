@@ -8,6 +8,6 @@ Route.group(() => {
     "AdminLocationsController.locationHistory"
   );
 })
-  .middleware("userIsAdmin")
+  .middleware("auth")
   .prefix(Env.get("PREFIX"))
   .namespace("App/Controllers/Http/Admin/Inventory/Location");
