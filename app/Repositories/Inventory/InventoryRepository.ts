@@ -6,8 +6,8 @@ import InventoryDto, {
 } from "App/Dtos/InventoryDto";
 import InventoryFormatter from "App/Formatters/Inventory/InventoryFormatter";
 import Inventory from "App/Models/Inventory";
-import IInventoryRepository from "./IInventoryRepository";
 import Location from "App/Models/Location";
+import IInventoryRepository from "./IInventoryRepository";
 
 export default class InventoryRepository implements IInventoryRepository {
   public async create(inventoryDto: InventoryDto): Promise<Inventory> {
@@ -88,6 +88,8 @@ export default class InventoryRepository implements IInventoryRepository {
           dateOfAcquisition: inventory.dateOfAcquisition.toFormat('dd-MM-yyyy'),
           value: inventory.value,
           term: inventory.term,
+          item: inventory.item,
+          locationId: location.id,
           location: formattedLocation,
         });
       })

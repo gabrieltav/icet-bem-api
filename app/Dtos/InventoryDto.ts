@@ -49,6 +49,8 @@ export interface DataInventory {
   dateOfAcquisition?: DateTime;
   value: number;
   term: string;
+  item: string;
+  locationId: string;
   location: string;
 }
 

@@ -5,7 +5,7 @@ import Location from "App/Models/Location";
 export default class InventoryFormatter {
   public static formatInventory(
     inventory: Inventory,
-    location: Location
+    location: Location,
   ): DataInventory {
     const {
       id,
@@ -16,6 +16,7 @@ export default class InventoryFormatter {
       dateOfAcquisition,
       value,
       term,
+      item,
     } = inventory;
     const locationDescription = location ? location.description : "";
     const locationRoom = location ? location.room : "";
@@ -37,6 +38,8 @@ export default class InventoryFormatter {
       dateOfAcquisition,
       value,
       term,
+      item,
+      locationId: location.id,
       location: formattedLocation,
     };
   }
