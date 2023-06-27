@@ -4,7 +4,6 @@ import InventoryDto, {
   FilterInventory,
   PaginatedInventory,
 } from "App/Dtos/InventoryDto";
-import InventoryFormatter from "App/Formatters/Inventory/InventoryFormatter";
 import Inventory from "App/Models/Inventory";
 import Location from "App/Models/Location";
 import IInventoryRepository from "./IInventoryRepository";
@@ -22,12 +21,7 @@ export default class InventoryRepository implements IInventoryRepository {
       })
       .firstOrFail();
 
-    const location = inventory.locations[0];
-
-    const formattedInventory = InventoryFormatter.formatInventory(
-      inventory,
-      location
-    );
+    const formattedInventory = this.formatInventory(inventory);
 
     return formattedInventory;
   }
@@ -77,7 +71,9 @@ export default class InventoryRepository implements IInventoryRepository {
     await Promise.all(
       inventories.toJSON().data.map(async (inventory) => {
         const location = inventory.locations[0];
-        const formattedLocation = location ? await this.formatLocation(location) : '';
+        const formattedLocation = location
+          ? await this.formatLocation(location)
+          : "";
 
         formattedInventories.push({
           id: inventory.id,
@@ -85,7 +81,7 @@ export default class InventoryRepository implements IInventoryRepository {
           patrimony: inventory.patrimony,
           qrcode: inventory.qrcode,
           state: inventory.state,
-          dateOfAcquisition: inventory.dateOfAcquisition.toFormat('dd-MM-yyyy'),
+          dateOfAcquisition: inventory.dateOfAcquisition.toFormat("dd-MM-yyyy"),
           value: inventory.value,
           term: inventory.term,
           item: inventory.item,
@@ -98,14 +94,34 @@ export default class InventoryRepository implements IInventoryRepository {
     return formattedInventories;
   }
 
+  private async formatInventory(inventory: Inventory): Promise<DataInventory> {
+    const location = inventory.locations[0];
+    const formattedLocation = location
+      ? await this.formatLocation(location)
+      : "";
+
+    return {
+      id: inventory.id,
+      description: inventory.description,
+      patrimony: inventory.patrimony,
+      qrcode: inventory.qrcode,
+      state: inventory.state,
+      dateOfAcquisition: inventory.dateOfAcquisition.toFormat("dd-MM-yyyy"),
+      value: inventory.value,
+      term: inventory.term,
+      item: inventory.item,
+      locationId: location.id,
+      location: formattedLocation,
+    };
+  }
+
   private async formatLocation(location: Location): Promise<string> {
     const { description, room, floor, block } = location;
 
-    const formattedLocation = `${description ? `${description} -` : ''}${
-      room ? ` ${room} -` : ''
+    const formattedLocation = `${description ? `${description} -` : ""}${
+      room ? ` ${room} -` : ""
     } PISO ${floor} - BLOCO ${block}`;
 
     return formattedLocation;
   }
-
 }
