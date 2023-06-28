@@ -81,7 +81,7 @@ export default class InventoryRepository implements IInventoryRepository {
           patrimony: inventory.patrimony,
           qrcode: inventory.qrcode,
           state: inventory.state,
-          dateOfAcquisition: inventory.dateOfAcquisition.toFormat("dd-MM-yyyy"),
+          dateOfAcquisition: inventory.dateOfAcquisition,
           value: inventory.value,
           term: inventory.term,
           item: inventory.item,
