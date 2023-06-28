@@ -43,7 +43,7 @@ export interface DataInventory {
   patrimony: string;
   qrcode?: string;
   state: InventoryState;
-  dateOfAcquisition?: string;
+  dateOfAcquisition?: DateTime;
   value: number;
   term: string;
   item: string;
