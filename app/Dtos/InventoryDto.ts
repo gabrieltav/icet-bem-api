@@ -1,5 +1,6 @@
 import { InventoryState } from "App/Services/Utils/Enums";
 import { DateTime } from "luxon";
+import { Meta } from "./Meta";
 
 export default interface InventoryDto {
   description: string;
@@ -17,10 +18,6 @@ export interface InventoryLocationDto {
   isLocation: boolean;
   createdAt: DateTime;
   updatedAt: DateTime;
-  room: string;
-  floor: number;
-  block: string;
-  description: string;
   item: string;
   patrimony: string;
   state: InventoryState;
@@ -66,3 +63,8 @@ export interface PaginatedInventory {
   previous_page_url: string | null;
   data: DataInventory[];
 }
+
+export type ListHistory = {
+  meta: Meta;
+  data: InventoryLocationDto[];
+};

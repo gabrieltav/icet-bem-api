@@ -1,6 +1,12 @@
 import Database from "@ioc:Adonis/Lucid/Database";
-import { FilterLocation, InventoryLocationDto } from "App/Dtos/InventoryDto";
+import { ModelPaginatorContract } from "@ioc:Adonis/Lucid/Orm";
+import {
+  FilterLocation,
+  InventoryLocationDto,
+  ListHistory,
+} from "App/Dtos/InventoryDto";
 import LocationDto from "App/Dtos/LocationDto";
+import { Query } from "App/Dtos/Query";
 import LocationFormatter from "App/Formatters/Location/LocationFormatter";
 import Location from "App/Models/Location";
 import ILocationRepository from "./ILocationRepository";
@@ -23,9 +29,10 @@ export default class LocationRepository implements ILocationRepository {
   }
 
   public async locationHistory(
-    inventoryId: string
-  ): Promise<InventoryLocationDto[]> {
-    const locations = await Database.from("inventory_locations")
+    inventoryId: string,
+    query: Query
+  ): Promise<ListHistory> {
+    const locations = (await Database.from("inventory_locations")
       .join("locations", "inventory_locations.location_id", "=", "locations.id")
       .join(
         "inventories",
@@ -34,7 +41,11 @@ export default class LocationRepository implements ILocationRepository {
         "inventories.id"
       )
       .where("inventory_id", inventoryId)
-      .orderBy("is_location", "desc");
+      .orderBy("is_location", "desc")
+      .paginate(
+        Number(query.page),
+        Number(query.limit)
+      )) as ModelPaginatorContract<any>;
 
     const activeLocation = locations.find((location) => location.is_location);
     if (activeLocation) {
@@ -46,25 +57,25 @@ export default class LocationRepository implements ILocationRepository {
     }
 
     const formattedLocations = await this.formatLocationData(locations);
-    return formattedLocations;
+    const result: ListHistory = {
+      ...locations.toJSON().meta,
+      data: formattedLocations,
+    };
+    return result;
   }
 
   private async formatLocationData(
-    locations: any[]
+    locations: ModelPaginatorContract<any>
   ): Promise<InventoryLocationDto[]> {
     const formattedLocations: InventoryLocationDto[] = [];
 
-    for (const location of locations) {
+    for (const location of locations.toJSON().data) {
       const formattedLocation: InventoryLocationDto = {
         inventoryId: location.inventory_id,
         locationId: location.location_id,
         isLocation: location.is_location,
         createdAt: location.updated_at,
         updatedAt: location.updated_at,
-        room: location.room,
-        floor: location.floor,
-        block: location.block,
-        description: location.description,
         item: location.item,
         patrimony: location.patrimony,
         state: location.state,

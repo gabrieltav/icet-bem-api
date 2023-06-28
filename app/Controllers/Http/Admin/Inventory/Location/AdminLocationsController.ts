@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import { Query } from "App/Dtos/Query";
 
 import ILocationRepository from "App/Repositories/Location/ILocationRepository";
 import LocationRepository from "App/Repositories/Location/LocationRepository";
@@ -21,9 +22,17 @@ export default class AdminLocationsController {
     return response.ok(inventaries);
   }
 
-  public async locationHistory({ params, response }: HttpContextContract) {
+  public async locationHistory({
+    params,
+    request,
+    response,
+  }: HttpContextContract) {
     const { inventoryId } = params;
-    const inventory = await this.locationService.locationHistory(inventoryId);
+    const query: Query = request.qs();
+    const inventory = await this.locationService.locationHistory(
+      inventoryId,
+      query
+    );
     return response.ok(inventory);
   }
 }

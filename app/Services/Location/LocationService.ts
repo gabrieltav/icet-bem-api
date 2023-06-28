@@ -1,5 +1,6 @@
-import { FilterLocation, InventoryLocationDto } from "App/Dtos/InventoryDto";
+import { FilterLocation, ListHistory } from "App/Dtos/InventoryDto";
 import LocationDto from "App/Dtos/LocationDto";
+import { Query } from "App/Dtos/Query";
 import ILocationRepository from "App/Repositories/Location/ILocationRepository";
 
 export default class LocationService {
@@ -10,8 +11,9 @@ export default class LocationService {
   }
 
   public async locationHistory(
-    inventoryId: string
-  ): Promise<InventoryLocationDto[]> {
-    return await this.locationRepository.locationHistory(inventoryId);
+    inventoryId: string,
+    query: Query
+  ): Promise<ListHistory> {
+    return await this.locationRepository.locationHistory(inventoryId, query);
   }
 }
