@@ -83,7 +83,7 @@ export default class InventoryRepository implements IInventoryRepository {
           state: inventory.state,
           dateOfAcquisition: inventory.dateOfAcquisition.toFormat("dd-MM-yyyy"),
           value: inventory.value,
-          term: inventory.term,
+          term: inventory?.term,
           item: inventory.item,
           locationId: location.id,
           location: formattedLocation,
